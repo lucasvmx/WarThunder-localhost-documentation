@@ -42,6 +42,18 @@
 
 ### Fields
 
+#### Legend
+<table>
+   <tr>
+      <th>Symbol</th>
+      <th>Description</th>
+   </tr>
+   <tr>
+      <th>N</th>
+      <th>The engine number</th>
+   </tr>
+ </table>
+
 - name: **valid**
     * contains: boolean
     * description:
@@ -102,47 +114,47 @@
     * contains: integer
     * description:
 
-- name: **throttle 1, %**
+- name: **throttle _N_, %**
     * contains: integer
     * description:
 
-- name: **radiator 1, %**
+- name: **radiator _N_, %**
     * contains: integer
     * description:
 
-- name: **magneto 1**
+- name: **magneto _N_**
     * contains: integer
     * description:
 
-- name: **power 1, hp**
+- name: **power _N_, hp**
     * contains: decimal
     * description: power of engine nº 1 in horse-power
 
-- name: **RPM 1**
+- name: **RPM _N_**
     * contains: integer
     * description:
 
-- name: **manifold pressure 1, atm**
+- name: **manifold pressure _N_, atm**
     * contains: decimal
     * description:
 
-- name: **water temp 1, C**
+- name: **water temp _N_, C**
     * contains: integer
     * description: water temperature of engine nº 1 in celsius
 
-- name: **oil temp 1, C**
+- name: **oil temp _N_, C**
     * contains: integer
     * description:
 
-- name: **pitch 1, deg**
+- name: **pitch _N_, deg**
     * contains: decimal
     * description:
 
-- name: **thrust 1, kgs**
+- name: **thrust _N_, kgs**
     * contains: integer
     * description:
 
-- name: **efficiency 1, %**
+- name: **efficiency _N_, %**
     * contains: integer
     * description:
     

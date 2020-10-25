@@ -1,5 +1,5 @@
-# Mission
-- This URL retrieves data from all map objects
+# State
+- This URL retrieves data of current aircraft state
 
 <br>
 

@@ -1,4 +1,4 @@
-# Mission
+# MapObjects
 - This URL retrieves data from all map objects
 
 <br>

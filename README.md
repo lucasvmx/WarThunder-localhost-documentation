@@ -2,10 +2,13 @@
 # War Thunder localhost API docs
 Repository dedicated to provide a full documentation to War Thunder localhost:8111 api
 
-- [Indicators](Indicators/INDICATORS.md)
-- [Mission](Mission/MISSION.md)
-- [MapObjects](MapObjects/MAP_OBJ.md)
-- [State](State/STATE.md)
+- [GameChat](Gamechat/GameChat.md)
+- [HudMsg](Hudmsg/Hudmsg.md)
+- [Indicators](Indicators/Indicators.md)
+- [MapObjects](MapObjects/MapObjects.md)
+- [MapInfo](Mapinfo/MapInfo.md)
+- [Mission](Mission/Mission.md)
+- [State](State/State.md)
 
 # Endpoints
 - http://localhost:8111/gamechat

@@ -5,6 +5,7 @@
 import urllib
 import urllib.request
 import json
+from sys import exit
 
 # URL constants
 base_url = 'http://localhost:8111'
@@ -56,10 +57,16 @@ def get_url_and_filename(data_type: str):
 
     return [wt_data_types[data_type]["URL"], wt_data_types[data_type]["URL"]]
 
-def get_wt_data(data_type: int):
+def get_wt_data(data_type: str):
 
     # Extract data
-    url, filename = get_url_and_filename(data_type)
+    try:
+        global url, filename, data
+        url, filename = get_url_and_filename(data_type)
+    except Exception as e:
+        print("could not get url and filename: {}".format(e))
+        exit(1)
+
     data: bytes = b''
 
     # Do HTTP request
@@ -90,4 +97,8 @@ def get_wt_data(data_type: int):
 
             file.write(markdown)
 
+def get_all_wt_data():
+
+    for key in wt_data_types.keys():
+        get_wt_data(key)
 

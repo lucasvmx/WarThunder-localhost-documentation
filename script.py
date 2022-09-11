@@ -55,7 +55,7 @@ def get_url_and_filename(data_type: str):
     if not data_type in wt_data_types.keys():
         raise("invalid key")
 
-    return [wt_data_types[data_type]["URL"], wt_data_types[data_type]["URL"]]
+    return [wt_data_types[data_type]["URL"], wt_data_types[data_type]["FILE"]]
 
 def get_wt_data(data_type: str):
 

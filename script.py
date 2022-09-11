@@ -27,13 +27,13 @@ state_file = 'state.md'
 
 # Type constants
 wt_data_types = {
-    "GAMECHAT": 1,
-    "HUDMSG": 2,
-    "INDICATORS": 3,
-    "MAPOBJECTS": 4,
-    "MAPINFO": 5,
-    "MISSION": 6,
-    "STATE": 7
+    "GAMECHAT": { "URL": gamechat_url, "FILE": gamechat_file},
+    "HUDMSG": { "URL": hudmsg_url, "FILE": hudmsg_file},
+    "INDICATORS": { "URL": indicators_url, "FILE": indicators_file },
+    "MAPOBJECTS": { "URL": mapobjects_url, "FILE": mapobjects_file },
+    "MAPINFO": { "URL": mapinfo_url, "FILE": mapinfo_file },
+    "MISSION": { "URL": mission_url, "FILE": mission_file },
+    "STATE": { "url": state_url, "FILE": state_file }
 }
 
 def get_correct_typename(typename: str):
@@ -50,35 +50,11 @@ def get_correct_typename(typename: str):
     
     return typename
 
-def get_url_and_filename(data_type: int):
-    url = ''
-    filename = ''
-    
-    if data_type == wt_data_types['GAMECHAT']:
-        url = gamechat_url
-        filename = gamechat_file
-    elif data_type == wt_data_types['HUDMSG']:
-        url = hudmsg_url
-        filename = hudmsg_file
-    elif data_type == wt_data_types['INDICATORS']:
-        url = indicators_url
-        filename = indicators_file
-    elif data_type == wt_data_types['MAPOBJECTS']:
-        url = mapobjects_url
-        filename = mapobjects_file
-    elif data_type == wt_data_types['MAPINFO']:
-        url = mapinfo_url
-        filename = mapinfo_file
-    elif data_type == wt_data_types['MISSION']:
-        url = mission_url
-        filename = mission_file
-    elif data_type == wt_data_types['STATE']:
-        url = state_url
-        filename = state_file
-    else:
-        raise('Invalid parameter')
-    
-    return [url, filename]
+def get_url_and_filename(data_type: str):
+    if not data_type in wt_data_types.keys():
+        raise("invalid key")
+
+    return [wt_data_types[data_type]["URL"], wt_data_types[data_type]["URL"]]
 
 def get_wt_data(data_type: int):
 

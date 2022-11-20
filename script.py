@@ -34,7 +34,7 @@ wt_data_types = {
     "MAPOBJECTS": { "URL": mapobjects_url, "FILE": mapobjects_file },
     "MAPINFO": { "URL": mapinfo_url, "FILE": mapinfo_file },
     "MISSION": { "URL": mission_url, "FILE": mission_file },
-    "STATE": { "url": state_url, "FILE": state_file }
+    "STATE": { "URL": state_url, "FILE": state_file }
 }
 
 def get_correct_typename(typename: str):
@@ -48,7 +48,7 @@ def get_correct_typename(typename: str):
     for k in v.keys():
         if k == typename:
             return v[f'{k}']
-    
+
     return typename
 
 def get_url_and_filename(data_type: str):
@@ -59,9 +59,11 @@ def get_url_and_filename(data_type: str):
 
 def get_wt_data(data_type: str):
 
+    data: bytes = b''
+
     # Extract data
     try:
-        global url, filename, data
+        global url, filename
         url, filename = get_url_and_filename(data_type)
     except Exception as e:
         print("could not get url and filename: {}".format(e))
@@ -70,16 +72,22 @@ def get_wt_data(data_type: str):
     data: bytes = b''
 
     # Do HTTP request
-    with urllib.request.urlopen(url) as f:
-        data += f.read()
+    try:
+        with urllib.request.urlopen(url) as f:
+            print("requesting {}".format(url))
+            data += f.read()
+    except:
+        print("failed to get resource: {}".format(url))
+        return
 
     payload = data.decode('utf-8')
-    json_info = json.loads(payload)
+    json_info = list[str](json.loads(payload))
 
     # Write result to markdown
     with open(filename, "w") as file:
-        for k in json_info.keys():
-            datatype = str(type(json_info[f'{k}']))
+        index = 0
+        for k in json_info:
+            datatype = str(type(json_info[index]))
             start = datatype.find('\'')
             end = datatype.find('\'', start + 1)
             if end == -1:
@@ -96,9 +104,13 @@ def get_wt_data(data_type: str):
     """
 
             file.write(markdown)
+            index+=1
 
 def get_all_wt_data():
 
     for key in wt_data_types.keys():
         get_wt_data(key)
 
+
+if __name__ == "__main__":
+    get_all_wt_data()

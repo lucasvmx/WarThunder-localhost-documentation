@@ -317,3 +317,7 @@ Access-Control-Allow-Methods: GET, POST, OPTIONS<br>
 - name: **blister7**
     * contains: float
     * description:
+
+- name: **wing_sweep_lever**
+    * contains: string
+    * description: wing speed angle

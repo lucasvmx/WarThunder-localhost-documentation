@@ -5,7 +5,7 @@
 
 #### HTTP Request
 
-- ```GET localhost:8111/state```
+- GET http://localhost:8111/state
 
 - Example:
 

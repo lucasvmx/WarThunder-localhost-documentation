@@ -5,7 +5,7 @@
 
 #### HTTP Request
 
-- ```GET localhost:8111/map_obj.json```
+- GET http://localhost:8111/map_obj.json
 
 - Example:
 

@@ -4,7 +4,7 @@
 <br>
 
 #### HTTP Request
-* ```GET localhost:8111/indicators```
+- GET localhost:8111/indicators
 
 #### Query parameters
 

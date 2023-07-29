@@ -5,7 +5,7 @@
 
 #### HTTP Request
 
-- ```GET localhost:8111/mission.json```
+- GET http://localhost:8111/mission.json
 
 #### Query parameters
 
@@ -16,12 +16,6 @@
 - Example:
 
 ```json
-HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 52
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Methods: GET, POST, OPTIONS
-
 {
    "objectives" : [
       {

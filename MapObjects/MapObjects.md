@@ -2255,8 +2255,8 @@
 
 - name: **dx** (aircrafts only)
    * contains: float
-   * description:
+   * description: x-component of direction vector of aircraft: $\texttt{dx} = cos(\vec V)$
 
 - name: **dy** (aircrafts only)
    * contains: float
-   * description:
+   * description: y-component of direction vector of aircraft: $\texttt{dy} = sin(\vec V)$

@@ -2,8 +2,10 @@
 # War Thunder localhost API docs
 Repository dedicated to provide a full documentation to War Thunder localhost:8111 api
 
-- Golang Client [https://github.com/lucasvmx/WarTelemetry](https://github.com/lucasvmx/WarTelemetry)
+# API Client Implementation
+- [https://github.com/lucasvmx/WarTelemetry](https://github.com/lucasvmx/WarTelemetry)
 
+# Documents
 - [GameChat](Gamechat/GameChat.md)
 - [HudMsg](Hudmsg/Hudmsg.md)
 - [Indicators](Indicators/Indicators.md)

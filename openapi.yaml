@@ -1,0 +1,600 @@
+openapi: 3.0.3
+info:
+  title: War Thunder Localhost API
+  description: >-
+    Especificação OpenAPI da API local exposta pelo War Thunder para telemetria,
+    estado da aeronave, chat, missão e dados do mapa.
+  version: 1.0.0
+  license:
+    name: GNU General Public License v3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+servers:
+  - url: http://localhost:8111
+    description: Servidor local do War Thunder
+tags:
+  - name: Chat
+    description: Mensagens do chat da partida e eventos de HUD.
+  - name: Aeronave
+    description: Instrumentos e estado atual da aeronave.
+  - name: Mapa
+    description: Metadados, objetos e imagem do mapa atual.
+  - name: Missão
+    description: Objetivos e status da missão atual.
+paths:
+  /gamechat:
+    get:
+      tags: [Chat]
+      summary: Lista mensagens do chat
+      description: >-
+        Retorna as mensagens disponíveis depois do identificador informado.
+        Use `lastId` para fazer polling incremental e evitar o processamento de
+        mensagens já recebidas.
+      operationId: getGameChat
+      parameters:
+        - $ref: '#/components/parameters/LastId'
+      responses:
+        '200':
+          description: Lista de mensagens do chat.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatMessage'
+              example:
+                - id: 70
+                  msg: hahaha
+                  sender: pecusgaming
+                  enemy: false
+                  mode: All
+                - id: 71
+                  msg: this thing is slightly op tbh
+                  sender: pecusgaming
+                  enemy: false
+                  mode: All
+
+  /hudmsg:
+    get:
+      tags: [Chat]
+      summary: Lista eventos e danos do HUD
+      description: >-
+        Retorna eventos e mensagens de dano desde os identificadores
+        informados. Os identificadores devem ser mantidos pelo cliente para
+        realizar polling incremental.
+      operationId: getHudMessages
+      parameters:
+        - $ref: '#/components/parameters/LastEvent'
+        - $ref: '#/components/parameters/LastDamage'
+      responses:
+        '200':
+          description: Eventos e mensagens de dano do HUD.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HudMessages'
+              example:
+                events: []
+                damage:
+                  - id: 161
+                    msg: percusiones1r (Spitfire) set afire *shino_rs (Spitfire)
+                    sender: ''
+                    enemy: false
+                    mode: ''
+                  - id: 162
+                    msg: '*shino_rs (Spitfire) has crashed.'
+                    sender: ''
+                    enemy: false
+                    mode: ''
+
+  /indicators:
+    get:
+      tags: [Aeronave]
+      summary: Obtém os instrumentos da aeronave
+      description: >-
+        Retorna os valores exibidos nos instrumentos da aeronave atual. A
+        quantidade de motores e alguns campos podem variar conforme o veículo.
+      operationId: getAircraftIndicators
+      responses:
+        '200':
+          description: Estado dos instrumentos da aeronave.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AircraftIndicators'
+              example:
+                valid: true
+                type: so_4050_vautour_2a_iaf
+                speed: 0
+                altitude_hour: 63.055698
+                compass: 355.831299
+                fuel: 3182
+                throttle: 0
+                mach: 0
+
+  /state:
+    get:
+      tags: [Aeronave]
+      summary: Obtém o estado atual da aeronave
+      description: >-
+        Retorna telemetria de voo e parâmetros dos motores. Os nomes das
+        propriedades seguem o formato fornecido pelo jogo, incluindo unidades
+        no próprio nome e o índice do motor.
+      operationId: getAircraftState
+      responses:
+        '200':
+          description: Estado atual da aeronave.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AircraftState'
+              example:
+                valid: true
+                H, m: 4936
+                TAS, km/h: 237
+                IAS, km/h: 185
+                M: 0.2
+                AoA, deg: 1.1
+                Vy, m/s: 3.2
+                Mfuel, kg: 750
+                'throttle 1, %': 100
+
+  /map_info.json:
+    get:
+      tags: [Mapa]
+      summary: Obtém metadados do mapa
+      description: >-
+        Retorna limites, origem da grade e tamanho dos passos do mapa atual.
+        Os exemplos atuais retornam os números como strings.
+      operationId: getMapInfo
+      responses:
+        '200':
+          description: Metadados do mapa atual.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapInfo'
+              example:
+                grid_steps: ['3250.0', '3250.0']
+                grid_zero: ['-32768.0', '32768.0']
+                map_generation: '1'
+                map_max: ['32768.0', '32768.0']
+                map_min: ['-32768.0', '-32768.0']
+
+  /map_obj.json:
+    get:
+      tags: [Mapa]
+      summary: Lista objetos do mapa
+      description: >-
+        Retorna os objetos visíveis no mapa atual. Campos como `sx`, `sy`,
+        `ex`, `ey`, `dx` e `dy` aparecem apenas para determinados tipos de
+        objeto.
+      operationId: getMapObjects
+      responses:
+        '200':
+          description: Objetos do mapa atual.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MapObject'
+              example:
+                - type: aircraft
+                  color: '#185AFF'
+                  color[]: [24, 90, 255]
+                  blink: 0
+                  icon: Assault
+                  icon_bg: none
+                  x: 0.535131
+                  y: 0.489011
+                  dx: -0.888831
+                  dy: -0.458235
+
+  /mission.json:
+    get:
+      tags: [Missão]
+      summary: Obtém a missão atual
+      description: Retorna os objetivos e o status da missão em andamento.
+      operationId: getMission
+      responses:
+        '200':
+          description: Missão atual.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+              example:
+                objectives:
+                  - primary: true
+                    status: in_progress
+                    text: Decole
+                status: running
+
+  /map.img:
+    get:
+      tags: [Mapa]
+      summary: Obtém a imagem do mapa
+      description: Retorna o recurso binário da imagem do mapa atual.
+      operationId: getMapImage
+      responses:
+        '200':
+          description: Imagem binária do mapa.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+components:
+  parameters:
+    LastId:
+      name: lastId
+      in: query
+      description: Último identificador de mensagem processado pelo cliente.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        default: 0
+    LastEvent:
+      name: lastEvt
+      in: query
+      description: Último identificador de evento processado pelo cliente.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        default: 0
+    LastDamage:
+      name: lastDmg
+      in: query
+      description: Último identificador de dano processado pelo cliente.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        default: 0
+
+  schemas:
+    ChatMessage:
+      type: object
+      description: Mensagem publicada no chat da partida.
+      required: [id, msg, sender, enemy, mode]
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador incremental da mensagem.
+          example: 70
+        msg:
+          type: string
+          description: Conteúdo da mensagem.
+          example: hahaha
+        sender:
+          type: string
+          description: Nome do jogador que enviou a mensagem.
+          example: pecusgaming
+        enemy:
+          type: boolean
+          description: Indica se o remetente pertence ao time inimigo.
+          example: false
+        mode:
+          type: string
+          description: Canal ou modo do chat.
+          example: All
+
+    HudMessages:
+      type: object
+      description: Coleção de eventos e mensagens de dano do HUD.
+      required: [events, damage]
+      properties:
+        events:
+          type: array
+          description: Eventos do HUD. O formato pode variar conforme a versão do jogo.
+          items:
+            type: object
+            additionalProperties: true
+        damage:
+          type: array
+          description: Mensagens de dano e destruição.
+          items:
+            $ref: '#/components/schemas/HudDamage'
+
+    HudDamage:
+      type: object
+      description: Mensagem de dano publicada pelo HUD.
+      required: [id, msg, sender, enemy, mode]
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 161
+        msg:
+          type: string
+          example: percusiones1r (Spitfire) set afire *shino_rs (Spitfire)
+        sender:
+          type: string
+          example: ''
+        enemy:
+          type: boolean
+          example: false
+        mode:
+          type: string
+          example: ''
+
+    AircraftIndicators:
+      type: object
+      description: >-
+        Instrumentos da aeronave. Os valores numéricos são normalmente
+        decimais; campos adicionais podem ser emitidos para aeronaves com
+        configurações diferentes.
+      required: [valid, type]
+      additionalProperties: true
+      properties:
+        valid:
+          type: boolean
+          description: Indica se os dados dos instrumentos são válidos.
+          example: true
+        type:
+          type: string
+          description: Identificador da aeronave.
+          example: so_4050_vautour_2a_iaf
+        speed: { $ref: '#/components/schemas/TelemetryNumber' }
+        pedals: { $ref: '#/components/schemas/TelemetryNumber' }
+        pedals1: { $ref: '#/components/schemas/TelemetryNumber' }
+        pedals2: { $ref: '#/components/schemas/TelemetryNumber' }
+        pedals3: { $ref: '#/components/schemas/TelemetryNumber' }
+        stick_elevator: { $ref: '#/components/schemas/TelemetryNumber' }
+        stick_elevator1: { $ref: '#/components/schemas/TelemetryNumber' }
+        stick_ailerons: { $ref: '#/components/schemas/TelemetryNumber' }
+        vario: { $ref: '#/components/schemas/TelemetryNumber' }
+        altitude_hour: { $ref: '#/components/schemas/TelemetryNumber' }
+        altitude_min: { $ref: '#/components/schemas/TelemetryNumber' }
+        altitude_10k: { $ref: '#/components/schemas/TelemetryNumber' }
+        aviahorizon_roll: { $ref: '#/components/schemas/TelemetryNumber' }
+        aviahorizon_pitch: { $ref: '#/components/schemas/TelemetryNumber' }
+        bank: { $ref: '#/components/schemas/TelemetryNumber' }
+        turn: { $ref: '#/components/schemas/TelemetryNumber' }
+        compass: { $ref: '#/components/schemas/TelemetryNumber' }
+        compass1: { $ref: '#/components/schemas/TelemetryNumber' }
+        compass2: { $ref: '#/components/schemas/TelemetryNumber' }
+        clock_hour: { $ref: '#/components/schemas/TelemetryNumber' }
+        clock_min: { $ref: '#/components/schemas/TelemetryNumber' }
+        clock_sec: { $ref: '#/components/schemas/TelemetryNumber' }
+        rpm_min: { $ref: '#/components/schemas/TelemetryNumber' }
+        rpm1_min: { $ref: '#/components/schemas/TelemetryNumber' }
+        rpm_hour: { $ref: '#/components/schemas/TelemetryNumber' }
+        rpm1_hour: { $ref: '#/components/schemas/TelemetryNumber' }
+        oil_pressure: { $ref: '#/components/schemas/TelemetryNumber' }
+        oil_pressure1: { $ref: '#/components/schemas/TelemetryNumber' }
+        head_temperature: { $ref: '#/components/schemas/TelemetryNumber' }
+        head_temperature1: { $ref: '#/components/schemas/TelemetryNumber' }
+        fuel: { $ref: '#/components/schemas/TelemetryNumber' }
+        fuel1: { $ref: '#/components/schemas/TelemetryNumber' }
+        fuel_pressure: { $ref: '#/components/schemas/TelemetryNumber' }
+        fuel_pressure1: { $ref: '#/components/schemas/TelemetryNumber' }
+        airbrake_lever: { $ref: '#/components/schemas/TelemetryNumber' }
+        airbrake_indicator: { $ref: '#/components/schemas/TelemetryNumber' }
+        gears: { $ref: '#/components/schemas/TelemetryNumber' }
+        gears1: { $ref: '#/components/schemas/TelemetryNumber' }
+        gears_lamp: { $ref: '#/components/schemas/TelemetryNumber' }
+        flaps: { $ref: '#/components/schemas/TelemetryNumber' }
+        flaps1: { $ref: '#/components/schemas/TelemetryNumber' }
+        throttle: { $ref: '#/components/schemas/TelemetryNumber' }
+        throttle1: { $ref: '#/components/schemas/TelemetryNumber' }
+        weapon2: { $ref: '#/components/schemas/TelemetryNumber' }
+        weapon3: { $ref: '#/components/schemas/TelemetryNumber' }
+        mach: { $ref: '#/components/schemas/TelemetryNumber' }
+        g_meter: { $ref: '#/components/schemas/TelemetryNumber' }
+        g_meter_min: { $ref: '#/components/schemas/TelemetryNumber' }
+        g_meter_max: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister1: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister2: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister3: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister4: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister5: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister6: { $ref: '#/components/schemas/TelemetryNumber' }
+        blister7: { $ref: '#/components/schemas/TelemetryNumber' }
+        wing_sweep_lever:
+          type: string
+          description: Ângulo da asa de geometria variável, quando disponível.
+
+    AircraftState:
+      type: object
+      description: >-
+        Estado de voo e parâmetros dos motores. O conjunto de propriedades
+        depende da aeronave; chaves com `N` representam o número do motor.
+      required: [valid]
+      additionalProperties: true
+      properties:
+        valid:
+          type: boolean
+          description: Indica se o estado retornado é válido.
+          example: true
+        'aileron, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'elevator, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'rudder, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'flaps, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'H, m': { $ref: '#/components/schemas/TelemetryNumber' }
+        'TAS, km/h': { $ref: '#/components/schemas/TelemetryNumber' }
+        'IAS, km/h': { $ref: '#/components/schemas/TelemetryNumber' }
+        M: { $ref: '#/components/schemas/TelemetryNumber' }
+        'AoA, deg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'AoS, deg': { $ref: '#/components/schemas/TelemetryNumber' }
+        Ny: { $ref: '#/components/schemas/TelemetryNumber' }
+        'Vy, m/s': { $ref: '#/components/schemas/TelemetryNumber' }
+        'Wx, deg/s': { $ref: '#/components/schemas/TelemetryNumber' }
+        'Mfuel, kg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'Mfuel0, kg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'throttle 1, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'throttle 2, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'throttle 3, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'mixture 1, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'mixture 2, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'mixture 3, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'magneto 1': { $ref: '#/components/schemas/TelemetryNumber' }
+        'magneto 2': { $ref: '#/components/schemas/TelemetryNumber' }
+        'magneto 3': { $ref: '#/components/schemas/TelemetryNumber' }
+        'power 1, hp': { $ref: '#/components/schemas/TelemetryNumber' }
+        'power 2, hp': { $ref: '#/components/schemas/TelemetryNumber' }
+        'power 3, hp': { $ref: '#/components/schemas/TelemetryNumber' }
+        'RPM 1': { $ref: '#/components/schemas/TelemetryNumber' }
+        'RPM 2': { $ref: '#/components/schemas/TelemetryNumber' }
+        'RPM 3': { $ref: '#/components/schemas/TelemetryNumber' }
+        'manifold pressure 1, atm': { $ref: '#/components/schemas/TelemetryNumber' }
+        'manifold pressure 2, atm': { $ref: '#/components/schemas/TelemetryNumber' }
+        'manifold pressure 3, atm': { $ref: '#/components/schemas/TelemetryNumber' }
+        'oil temp 1, C': { $ref: '#/components/schemas/TelemetryNumber' }
+        'oil temp 2, C': { $ref: '#/components/schemas/TelemetryNumber' }
+        'oil temp 3, C': { $ref: '#/components/schemas/TelemetryNumber' }
+        'pitch 1, deg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'pitch 2, deg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'pitch 3, deg': { $ref: '#/components/schemas/TelemetryNumber' }
+        'thrust 1, kgs': { $ref: '#/components/schemas/TelemetryNumber' }
+        'thrust 2, kgs': { $ref: '#/components/schemas/TelemetryNumber' }
+        'thrust 3, kgs': { $ref: '#/components/schemas/TelemetryNumber' }
+        'efficiency 1, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'efficiency 2, %': { $ref: '#/components/schemas/TelemetryNumber' }
+        'efficiency 3, %': { $ref: '#/components/schemas/TelemetryNumber' }
+
+    MapInfo:
+      type: object
+      description: Metadados espaciais do mapa atual.
+      required: [grid_steps, grid_zero, map_generation, map_max, map_min]
+      properties:
+        grid_steps:
+          $ref: '#/components/schemas/NumericStringPair'
+        grid_zero:
+          $ref: '#/components/schemas/NumericStringPair'
+        map_generation:
+          type: string
+          description: Versão ou geração do mapa, representada como string numérica.
+          example: '1'
+        map_max:
+          $ref: '#/components/schemas/NumericStringPair'
+        map_min:
+          $ref: '#/components/schemas/NumericStringPair'
+
+    MapObject:
+      type: object
+      description: Objeto representado no mapa.
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+          description: Tipo do objeto.
+          enum: [aircraft, airfield, bombing_point, defending_point, ground_model, respawn_base_bomber, respawn_base_fighter]
+          example: aircraft
+        color:
+          type: string
+          description: Cor hexadecimal associada ao objeto.
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          example: '#185AFF'
+        'color[]':
+          type: array
+          description: Componentes RGB da cor associada ao objeto.
+          minItems: 3
+          maxItems: 3
+          items:
+            type: integer
+            minimum: 0
+            maximum: 255
+          example: [24, 90, 255]
+        blink:
+          type: integer
+          description: Indicador de intermitência do objeto.
+          example: 0
+        icon:
+          type: string
+          description: Nome do ícone associado ao objeto.
+          example: Assault
+        icon_bg:
+          type: string
+          description: Nome do ícone de fundo associado ao objeto.
+          example: none
+        x:
+          type: number
+          format: double
+          description: Posição X normalizada no mapa.
+          example: 0.535131
+        y:
+          type: number
+          format: double
+          description: Posição Y normalizada no mapa.
+          example: 0.489011
+        sx:
+          type: number
+          format: double
+          description: Posição X inicial de uma área, usada por airfields.
+        sy:
+          type: number
+          format: double
+          description: Posição Y inicial de uma área, usada por airfields.
+        ex:
+          type: number
+          format: double
+          description: Posição X final de uma área, usada por airfields.
+        ey:
+          type: number
+          format: double
+          description: Posição Y final de uma área, usada por airfields.
+        dx:
+          type: number
+          format: double
+          description: Componente X do vetor de direção, usada por aircraft.
+        dy:
+          type: number
+          format: double
+          description: Componente Y do vetor de direção, usada por aircraft.
+
+    Mission:
+      type: object
+      description: Missão atual e seus objetivos.
+      required: [objectives, status]
+      properties:
+        objectives:
+          type: array
+          description: Lista de objetivos da missão.
+          items:
+            $ref: '#/components/schemas/MissionObjective'
+        status:
+          type: string
+          description: Status geral da missão. O valor observado normalmente é `running`.
+          example: running
+
+    MissionObjective:
+      type: object
+      description: Objetivo individual da missão.
+      required: [primary, status, text]
+      properties:
+        primary:
+          type: boolean
+          description: Indica se é um objetivo primário.
+          example: true
+        status:
+          type: string
+          description: Status do objetivo.
+          enum: [in_progress, completed, failed]
+          example: in_progress
+        text:
+          type: string
+          description: Instrução apresentada ao jogador.
+          example: Decole
+
+    NumericStringPair:
+      type: array
+      description: Par de valores numéricos serializados como strings.
+      minItems: 2
+      maxItems: 2
+      items:
+        type: string
+        pattern: '^-?[0-9]+(?:\.[0-9]+)?$'
+      example: ['3250.0', '3250.0']
+
+    TelemetryNumber:
+      type: number
+      format: double
+      description: Valor numérico de telemetria.

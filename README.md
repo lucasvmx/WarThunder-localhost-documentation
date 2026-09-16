@@ -10,6 +10,9 @@ A especificação completa está em [`openapi.yaml`](openapi.yaml). Ela pode ser
 importada diretamente no Swagger UI, Redoc, Postman ou em qualquer gerador de
 clientes compatível com OpenAPI 3.0.
 
+A documentação interativa está disponível no [Swagger UI publicado no GitHub
+Pages](https://lucasvmx.github.io/WarThunder-localhost-documentation/).
+
 > A API é local e não exige autenticação. Os endpoints só ficam disponíveis
 > enquanto o servidor HTTP do jogo estiver ativo.
 

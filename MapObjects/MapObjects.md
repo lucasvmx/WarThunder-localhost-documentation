@@ -1,11 +1,11 @@
 # MapObjects
-- This URL retrieves data from all map objects
+- This URL retrieves data for all objects on the map.
 
 <br>
 
 #### HTTP Request
 
-- GET http://localhost:8111/map_obj.json
+- `GET http://localhost:8111/map_obj.json`
 
 - Example:
 
@@ -2201,21 +2201,21 @@
 ```
 
 ### HTTP Response
-- Retrieves a JSON containing a array of [MapObject](#MapObject)
+- Returns a JSON array containing [MapObject](#MapObject) entries.
 
 ### MapObject
 - #### Fields
 - name: **type**
     * contains: string
-    * description: the type of map object can be one of the following values -> _ground_model_, _aircraft_
+    * description: The map object type. Known values include _ground_model_ and _aircraft_.
 
 - name: **color**
     * contains: string
-    * description: the hex color code associated to the object
+    * description: The hexadecimal color code associated with the object.
 
 - name: **color[]**
     * contains: array of string
-    * description: the RGB code for each color associated to the object
+    * description: The RGB components of the color associated with the object.
 
 - name: **blink**
     * contains: integer
@@ -2223,19 +2223,19 @@
 
 - name: **icon**
     * contains: string
-    * description: the name of the icon associated to object. If this value is **Player** then the current object is the current player.
+    * description: The name of the icon associated with the object. If this value is **Player**, the object represents the current player.
 
 - name: **icon_bg**
     * contains: string
-    * description: the name of background icon associated to the object
+    * description: The name of the background icon associated with the object.
 
 - name: **x**
     * contains: float
-    * description: the _x_ position of player in map
+    * description: The player's _x_ position on the map.
 
 - name: **y**
     * contains: float
-    * description: the _y_ position of player in map
+    * description: The player's _y_ position on the map.
 
 - name: **sx** (airfields only)
    * contains: float
@@ -2255,8 +2255,8 @@
 
 - name: **dx** (aircrafts only)
    * contains: float
-   * description: x-component of direction vector of aircraft: $\texttt{dx} = cos(\vec V)$
+   * description: X component of the aircraft direction vector: $\texttt{dx} = cos(\vec V)$.
 
 - name: **dy** (aircrafts only)
    * contains: float
-   * description: y-component of direction vector of aircraft: $\texttt{dy} = sin(\vec V)$
+   * description: Y component of the aircraft direction vector: $\texttt{dy} = sin(\vec V)$.

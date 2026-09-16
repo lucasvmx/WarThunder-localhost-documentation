@@ -1,73 +1,73 @@
 # War Thunder Localhost API
 
-Documentação da API HTTP local exposta pelo War Thunder em `localhost:8111`.
-Ela fornece telemetria da aeronave, estado de voo, chat, missão e dados do mapa
-para clientes locais.
+Documentation for the local HTTP API exposed by War Thunder at
+`localhost:8111`. It provides aircraft telemetry, flight state, chat, mission,
+and map data for local clients.
 
-## Especificação OpenAPI
+## OpenAPI Specification
 
-A especificação completa está em [`openapi.yaml`](openapi.yaml). Ela pode ser
-importada diretamente no Swagger UI, Redoc, Postman ou em qualquer gerador de
-clientes compatível com OpenAPI 3.0.
+The complete specification is available in [`openapi.yaml`](openapi.yaml). It
+can be imported directly into Swagger UI, Redoc, Postman, or any client
+generator compatible with OpenAPI 3.0.
 
-A documentação interativa está disponível no [Swagger UI publicado no GitHub
+Interactive documentation is available in the [Swagger UI published on GitHub
 Pages](https://lucasvmx.github.io/WarThunder-localhost-documentation/).
 
-> A API é local e não exige autenticação. Os endpoints só ficam disponíveis
-> enquanto o servidor HTTP do jogo estiver ativo.
+> The API is local and does not require authentication. Endpoints are only
+> available while the game's HTTP server is running.
 
-## Início rápido
+## Quick Start
 
 ```bash
-# Estado atual da aeronave
+# Current aircraft state
 curl http://localhost:8111/state
 
-# Instrumentos da aeronave
+# Aircraft instruments
 curl http://localhost:8111/indicators
 
-# Mensagens novas do chat a partir do último ID processado
+# New chat messages since the last processed ID
 curl 'http://localhost:8111/gamechat?lastId=0'
 ```
 
-Os endpoints de chat e HUD usam identificadores incrementais. Um cliente deve
-guardar o último `id` processado e enviá-lo na próxima consulta para realizar
-polling incremental.
+The chat and HUD endpoints use incremental identifiers. A client should store
+the last processed `id` and send it in the next request for incremental
+polling.
 
 ## Endpoints
 
-| Recurso | Método e rota | Documentação |
+| Resource | Method and route | Documentation |
 | --- | --- | --- |
 | Chat | `GET /gamechat?lastId=0` | [`GameChat`](Gamechat/GameChat.md) |
-| HUD e danos | `GET /hudmsg?lastEvt=0&lastDmg=0` | [`HudMsg`](Hudmsg/Hudmsg.md) |
-| Instrumentos | `GET /indicators` | [`Indicators`](Indicators/Indicators.md) |
-| Objetos do mapa | `GET /map_obj.json` | [`MapObjects`](MapObjects/MapObjects.md) |
-| Metadados do mapa | `GET /map_info.json` | [`MapInfo`](Mapinfo/MapInfo.md) |
-| Imagem do mapa | `GET /map.img` | [`MapInfo`](Mapinfo/MapInfo.md) |
-| Missão | `GET /mission.json` | [`Mission`](Mission/Mission.md) |
-| Estado da aeronave | `GET /state` | [`State`](State/State.md) |
+| HUD and damage | `GET /hudmsg?lastEvt=0&lastDmg=0` | [`HudMsg`](Hudmsg/Hudmsg.md) |
+| Instruments | `GET /indicators` | [`Indicators`](Indicators/Indicators.md) |
+| Map objects | `GET /map_obj.json` | [`MapObjects`](MapObjects/MapObjects.md) |
+| Map metadata | `GET /map_info.json` | [`MapInfo`](Mapinfo/MapInfo.md) |
+| Map image | `GET /map.img` | [`MapInfo`](Mapinfo/MapInfo.md) |
+| Mission | `GET /mission.json` | [`Mission`](Mission/Mission.md) |
+| Aircraft state | `GET /state` | [`State`](State/State.md) |
 
-## Integração
+## Integration
 
-1. Inicie o War Thunder e certifique-se de que a API local esteja disponível.
-2. Consulte os endpoints JSON com `GET` em `http://localhost:8111`.
-3. Para chat e HUD, mantenha os últimos identificadores recebidos.
-4. Use [`openapi.yaml`](openapi.yaml) como contrato para gerar modelos ou um
-   cliente da API.
+1. Start War Thunder and make sure the local API is available.
+2. Query the JSON endpoints with `GET` at `http://localhost:8111`.
+3. For chat and HUD data, keep track of the latest identifiers received.
+4. Use [`openapi.yaml`](openapi.yaml) as the contract for generating models or
+   an API client.
 
-Os valores de instrumentos e estado variam conforme a aeronave. Por isso,
-clientes devem tolerar propriedades adicionais e a ausência de campos que não
-se aplicam ao veículo atual.
+Instrument and state values vary by aircraft. Clients should therefore allow
+additional properties and missing fields that do not apply to the current
+vehicle.
 
-## Cliente de referência
+## Reference Client
 
 - [WarTelemetry](https://github.com/lucasvmx/WarTelemetry)
 
-## Desenvolvimento
+## Development
 
-O [`script.py`](script.py) é um utilitário auxiliar que consulta os endpoints
-JSON e gera listas de campos em Markdown. Ele requer que o jogo esteja
-disponível em `localhost:8111`.
+[`script.py`](script.py) is a helper utility that queries the JSON endpoints
+and generates field lists in Markdown. It requires the game to be available at
+`localhost:8111`.
 
 ## War Thunder
 
-[Baixe o War Thunder no site oficial](https://warthunder.com/en/game/).
+[Download War Thunder from the official website](https://warthunder.com/en/game/).

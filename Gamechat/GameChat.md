@@ -1,29 +1,37 @@
-# Gamechat
+# Game Chat
 
-- Retrieves data from game chat
+- Retrieves data from the game chat.
 
 <br>
 
-#### Detailed description
+#### Detailed Description
 
-Gamechat is accessed via url query parameters ``?field=value``  
-Note: these values start at 0 or 1 (whatever it is) only at game start. so the second match will start the id where the first match id ended.
+The game chat endpoint accepts URL query parameters in the `?field=value`
+format.
 
-http://localhost:8111/gamechat?lastId=0
+Note: these identifiers start at 0 or 1, depending on the game, only when the
+game starts. The next match continues with the identifier where the previous
+match ended.
+
+`http://localhost:8111/gamechat?lastId=0`
 
 <br>
 
 #### HTTP Request
-- GET http://localhost:8111/gamechat
 
-#### Query parameters
+- `GET http://localhost:8111/gamechat`
 
-- lastId
-    - gives you json of all chat messages up until the point you requested it
-    
+#### Query Parameters
+
+- `lastId`
+  - ID of the last message already processed. Messages after this ID are
+    returned.
+
 - Example:
-  - if there were 56 messages, and you requested ``GET http://localhost:8111/gamechat?lastId=55`` you would only get the last (56th) message (assuming that it has a index start of 0, not 1...)
-  
+  - If there were 56 messages and you requested
+    `GET http://localhost:8111/gamechat?lastId=55`, you would receive only the
+    last (56th) message, assuming indexing starts at 0 rather than 1.
+
 #### HTTP Response :white_check_mark:
 
 ```json
@@ -48,21 +56,21 @@ http://localhost:8111/gamechat?lastId=0
 ### Fields
 
 - name: **id**
-    * contains: integer
-    * description: message id
+  - contains: integer
+  - description: Incremental message ID.
 
 - name: **msg**
-    * contains: string
-    * description: message content
+  - contains: string
+  - description: Message content.
 
 - name: **sender**
-    * contains: string
-    * description: player name
+  - contains: string
+  - description: Player name.
 
 - name: **enemy**
-    * contains: boolean
-    * description: true if is a enemy player false otherwise
+  - contains: boolean
+  - description: `true` if the sender is an enemy player; `false` otherwise.
 
 - name: **mode**
-    * contains: string
-    * description:
+  - contains: string
+  - description: Chat channel or mode.

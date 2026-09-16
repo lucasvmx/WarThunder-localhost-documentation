@@ -1,12 +1,12 @@
-# Indicators
-- This URL retrieves data from aircraft instruments
+# Aircraft Indicators
+- This URL retrieves data from the aircraft instruments.
 
 <br>
 
 #### HTTP Request
-- GET http://localhost:8111/indicators
+- `GET http://localhost:8111/indicators`
 
-#### Query parameters
+#### Query Parameters
 
 - None
 
@@ -88,11 +88,11 @@ Access-Control-Allow-Methods: GET, POST, OPTIONS<br>
 
 - name: **valid**
     * contains: bool
-    * description:
+    * description: Whether the instrument data is valid.
 
 - name: **type**
     * contains: string
-    * description: contains aircraft name
+    * description: Aircraft identifier.
 
 - name: **speed**
     * contains: float

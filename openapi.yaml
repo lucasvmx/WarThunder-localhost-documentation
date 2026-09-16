@@ -2,39 +2,38 @@ openapi: 3.0.3
 info:
   title: War Thunder Localhost API
   description: >-
-    Especificação OpenAPI da API local exposta pelo War Thunder para telemetria,
-    estado da aeronave, chat, missão e dados do mapa.
+    OpenAPI specification for the local API exposed by War Thunder for
+    telemetry, aircraft state, chat, mission, and map data.
   version: 1.0.0
   license:
     name: GNU General Public License v3.0
     url: https://www.gnu.org/licenses/gpl-3.0.html
 servers:
   - url: http://localhost:8111
-    description: Servidor local do War Thunder
+    description: Local War Thunder server
 tags:
   - name: Chat
-    description: Mensagens do chat da partida e eventos de HUD.
-  - name: Aeronave
-    description: Instrumentos e estado atual da aeronave.
-  - name: Mapa
-    description: Metadados, objetos e imagem do mapa atual.
-  - name: Missão
-    description: Objetivos e status da missão atual.
+    description: In-game chat messages and HUD events.
+  - name: Aircraft
+    description: Aircraft instruments and current state.
+  - name: Map
+    description: Current map metadata, objects, and image.
+  - name: Mission
+    description: Current mission objectives and status.
 paths:
   /gamechat:
     get:
       tags: [Chat]
-      summary: Lista mensagens do chat
+      summary: List chat messages
       description: >-
-        Retorna as mensagens disponíveis depois do identificador informado.
-        Use `lastId` para fazer polling incremental e evitar o processamento de
-        mensagens já recebidas.
+        Returns messages available after the specified identifier. Use `lastId`
+        for incremental polling and to avoid processing messages more than once.
       operationId: getGameChat
       parameters:
         - $ref: '#/components/parameters/LastId'
       responses:
         '200':
-          description: Lista de mensagens do chat.
+          description: List of chat messages.
           content:
             application/json:
               schema:
@@ -56,18 +55,17 @@ paths:
   /hudmsg:
     get:
       tags: [Chat]
-      summary: Lista eventos e danos do HUD
+      summary: List HUD events and damage messages
       description: >-
-        Retorna eventos e mensagens de dano desde os identificadores
-        informados. Os identificadores devem ser mantidos pelo cliente para
-        realizar polling incremental.
+        Returns events and damage messages after the specified identifiers. The
+        client must keep these identifiers to perform incremental polling.
       operationId: getHudMessages
       parameters:
         - $ref: '#/components/parameters/LastEvent'
         - $ref: '#/components/parameters/LastDamage'
       responses:
         '200':
-          description: Eventos e mensagens de dano do HUD.
+          description: HUD events and damage messages.
           content:
             application/json:
               schema:
@@ -88,15 +86,15 @@ paths:
 
   /indicators:
     get:
-      tags: [Aeronave]
-      summary: Obtém os instrumentos da aeronave
+      tags: [Aircraft]
+      summary: Get aircraft instruments
       description: >-
-        Retorna os valores exibidos nos instrumentos da aeronave atual. A
-        quantidade de motores e alguns campos podem variar conforme o veículo.
+        Returns the values displayed by the current aircraft's instruments. The
+        number of engines and some fields may vary by vehicle.
       operationId: getAircraftIndicators
       responses:
         '200':
-          description: Estado dos instrumentos da aeronave.
+          description: Current aircraft instrument state.
           content:
             application/json:
               schema:
@@ -113,16 +111,16 @@ paths:
 
   /state:
     get:
-      tags: [Aeronave]
-      summary: Obtém o estado atual da aeronave
+      tags: [Aircraft]
+      summary: Get the current aircraft state
       description: >-
-        Retorna telemetria de voo e parâmetros dos motores. Os nomes das
-        propriedades seguem o formato fornecido pelo jogo, incluindo unidades
-        no próprio nome e o índice do motor.
+        Returns flight telemetry and engine parameters. Property names follow
+        the format provided by the game, including units in the name and the
+        engine index.
       operationId: getAircraftState
       responses:
         '200':
-          description: Estado atual da aeronave.
+          description: Current aircraft state.
           content:
             application/json:
               schema:
@@ -140,15 +138,15 @@ paths:
 
   /map_info.json:
     get:
-      tags: [Mapa]
-      summary: Obtém metadados do mapa
+      tags: [Map]
+      summary: Get map metadata
       description: >-
-        Retorna limites, origem da grade e tamanho dos passos do mapa atual.
-        Os exemplos atuais retornam os números como strings.
+        Returns the boundaries, grid origin, and step sizes for the current map.
+        The current examples return numbers as strings.
       operationId: getMapInfo
       responses:
         '200':
-          description: Metadados do mapa atual.
+          description: Current map metadata.
           content:
             application/json:
               schema:
@@ -162,16 +160,15 @@ paths:
 
   /map_obj.json:
     get:
-      tags: [Mapa]
-      summary: Lista objetos do mapa
+      tags: [Map]
+      summary: List map objects
       description: >-
-        Retorna os objetos visíveis no mapa atual. Campos como `sx`, `sy`,
-        `ex`, `ey`, `dx` e `dy` aparecem apenas para determinados tipos de
-        objeto.
+        Returns objects visible on the current map. Fields such as `sx`, `sy`,
+        `ex`, `ey`, `dx`, and `dy` only appear for certain object types.
       operationId: getMapObjects
       responses:
         '200':
-          description: Objetos do mapa atual.
+          description: Current map objects.
           content:
             application/json:
               schema:
@@ -192,13 +189,13 @@ paths:
 
   /mission.json:
     get:
-      tags: [Missão]
-      summary: Obtém a missão atual
-      description: Retorna os objetivos e o status da missão em andamento.
+      tags: [Mission]
+      summary: Get the current mission
+      description: Returns the objectives and status of the current mission.
       operationId: getMission
       responses:
         '200':
-          description: Missão atual.
+          description: Current mission.
           content:
             application/json:
               schema:
@@ -212,13 +209,13 @@ paths:
 
   /map.img:
     get:
-      tags: [Mapa]
-      summary: Obtém a imagem do mapa
-      description: Retorna o recurso binário da imagem do mapa atual.
+      tags: [Map]
+      summary: Get the map image
+      description: Returns the binary resource for the current map image.
       operationId: getMapImage
       responses:
         '200':
-          description: Imagem binária do mapa.
+          description: Binary map image.
           content:
             application/octet-stream:
               schema:
@@ -230,7 +227,7 @@ components:
     LastId:
       name: lastId
       in: query
-      description: Último identificador de mensagem processado pelo cliente.
+      description: ID of the last message processed by the client.
       required: false
       schema:
         type: integer
@@ -240,7 +237,7 @@ components:
     LastEvent:
       name: lastEvt
       in: query
-      description: Último identificador de evento processado pelo cliente.
+      description: ID of the last event processed by the client.
       required: false
       schema:
         type: integer
@@ -250,7 +247,7 @@ components:
     LastDamage:
       name: lastDmg
       in: query
-      description: Último identificador de dano processado pelo cliente.
+      description: ID of the last damage message processed by the client.
       required: false
       schema:
         type: integer
@@ -261,51 +258,51 @@ components:
   schemas:
     ChatMessage:
       type: object
-      description: Mensagem publicada no chat da partida.
+      description: Message published in the in-game chat.
       required: [id, msg, sender, enemy, mode]
       properties:
         id:
           type: integer
           format: int64
-          description: Identificador incremental da mensagem.
+          description: Incremental message ID.
           example: 70
         msg:
           type: string
-          description: Conteúdo da mensagem.
+          description: Message content.
           example: hahaha
         sender:
           type: string
-          description: Nome do jogador que enviou a mensagem.
+          description: Name of the player who sent the message.
           example: pecusgaming
         enemy:
           type: boolean
-          description: Indica se o remetente pertence ao time inimigo.
+          description: Whether the sender belongs to the enemy team.
           example: false
         mode:
           type: string
-          description: Canal ou modo do chat.
+          description: Chat channel or mode.
           example: All
 
     HudMessages:
       type: object
-      description: Coleção de eventos e mensagens de dano do HUD.
+      description: Collection of HUD events and damage messages.
       required: [events, damage]
       properties:
         events:
           type: array
-          description: Eventos do HUD. O formato pode variar conforme a versão do jogo.
+          description: HUD events. The format may vary by game version.
           items:
             type: object
             additionalProperties: true
         damage:
           type: array
-          description: Mensagens de dano e destruição.
+          description: Damage and destruction messages.
           items:
             $ref: '#/components/schemas/HudDamage'
 
     HudDamage:
       type: object
-      description: Mensagem de dano publicada pelo HUD.
+      description: Damage message published by the HUD.
       required: [id, msg, sender, enemy, mode]
       properties:
         id:
@@ -328,19 +325,18 @@ components:
     AircraftIndicators:
       type: object
       description: >-
-        Instrumentos da aeronave. Os valores numéricos são normalmente
-        decimais; campos adicionais podem ser emitidos para aeronaves com
-        configurações diferentes.
+        Aircraft instruments. Numeric values are normally decimals; additional
+        fields may be emitted for aircraft with different configurations.
       required: [valid, type]
       additionalProperties: true
       properties:
         valid:
           type: boolean
-          description: Indica se os dados dos instrumentos são válidos.
+          description: Whether the instrument data is valid.
           example: true
         type:
           type: string
-          description: Identificador da aeronave.
+          description: Aircraft identifier.
           example: so_4050_vautour_2a_iaf
         speed: { $ref: '#/components/schemas/TelemetryNumber' }
         pedals: { $ref: '#/components/schemas/TelemetryNumber' }
@@ -400,19 +396,19 @@ components:
         blister7: { $ref: '#/components/schemas/TelemetryNumber' }
         wing_sweep_lever:
           type: string
-          description: Ângulo da asa de geometria variável, quando disponível.
+          description: Sweep angle of the variable-sweep wing, when available.
 
     AircraftState:
       type: object
       description: >-
-        Estado de voo e parâmetros dos motores. O conjunto de propriedades
-        depende da aeronave; chaves com `N` representam o número do motor.
+        Flight state and engine parameters. The set of properties depends on
+        the aircraft; keys with `N` represent the engine number.
       required: [valid]
       additionalProperties: true
       properties:
         valid:
           type: boolean
-          description: Indica se o estado retornado é válido.
+          description: Whether the returned state is valid.
           example: true
         'aileron, %': { $ref: '#/components/schemas/TelemetryNumber' }
         'elevator, %': { $ref: '#/components/schemas/TelemetryNumber' }
@@ -462,7 +458,7 @@ components:
 
     MapInfo:
       type: object
-      description: Metadados espaciais do mapa atual.
+      description: Spatial metadata for the current map.
       required: [grid_steps, grid_zero, map_generation, map_max, map_min]
       properties:
         grid_steps:
@@ -471,7 +467,7 @@ components:
           $ref: '#/components/schemas/NumericStringPair'
         map_generation:
           type: string
-          description: Versão ou geração do mapa, representada como string numérica.
+          description: Map version or generation, represented as a numeric string.
           example: '1'
         map_max:
           $ref: '#/components/schemas/NumericStringPair'
@@ -480,22 +476,22 @@ components:
 
     MapObject:
       type: object
-      description: Objeto representado no mapa.
+      description: Object represented on the map.
       additionalProperties: true
       properties:
         type:
           type: string
-          description: Tipo do objeto.
+          description: Object type.
           enum: [aircraft, airfield, bombing_point, defending_point, ground_model, respawn_base_bomber, respawn_base_fighter]
           example: aircraft
         color:
           type: string
-          description: Cor hexadecimal associada ao objeto.
+          description: Hexadecimal color associated with the object.
           pattern: '^#[0-9A-Fa-f]{6}$'
           example: '#185AFF'
         'color[]':
           type: array
-          description: Componentes RGB da cor associada ao objeto.
+          description: RGB components of the color associated with the object.
           minItems: 3
           maxItems: 3
           items:
@@ -505,88 +501,88 @@ components:
           example: [24, 90, 255]
         blink:
           type: integer
-          description: Indicador de intermitência do objeto.
+          description: Object blinking indicator.
           example: 0
         icon:
           type: string
-          description: Nome do ícone associado ao objeto.
+          description: Name of the icon associated with the object.
           example: Assault
         icon_bg:
           type: string
-          description: Nome do ícone de fundo associado ao objeto.
+          description: Name of the background icon associated with the object.
           example: none
         x:
           type: number
           format: double
-          description: Posição X normalizada no mapa.
+          description: Normalized X position on the map.
           example: 0.535131
         y:
           type: number
           format: double
-          description: Posição Y normalizada no mapa.
+          description: Normalized Y position on the map.
           example: 0.489011
         sx:
           type: number
           format: double
-          description: Posição X inicial de uma área, usada por airfields.
+          description: Initial X position of an area, used by airfields.
         sy:
           type: number
           format: double
-          description: Posição Y inicial de uma área, usada por airfields.
+          description: Initial Y position of an area, used by airfields.
         ex:
           type: number
           format: double
-          description: Posição X final de uma área, usada por airfields.
+          description: Final X position of an area, used by airfields.
         ey:
           type: number
           format: double
-          description: Posição Y final de uma área, usada por airfields.
+          description: Final Y position of an area, used by airfields.
         dx:
           type: number
           format: double
-          description: Componente X do vetor de direção, usada por aircraft.
+          description: X component of the direction vector, used by aircraft.
         dy:
           type: number
           format: double
-          description: Componente Y do vetor de direção, usada por aircraft.
+          description: Y component of the direction vector, used by aircraft.
 
     Mission:
       type: object
-      description: Missão atual e seus objetivos.
+      description: Current mission and its objectives.
       required: [objectives, status]
       properties:
         objectives:
           type: array
-          description: Lista de objetivos da missão.
+          description: List of mission objectives.
           items:
             $ref: '#/components/schemas/MissionObjective'
         status:
           type: string
-          description: Status geral da missão. O valor observado normalmente é `running`.
+          description: Overall mission status. The commonly observed value is `running`.
           example: running
 
     MissionObjective:
       type: object
-      description: Objetivo individual da missão.
+      description: Individual mission objective.
       required: [primary, status, text]
       properties:
         primary:
           type: boolean
-          description: Indica se é um objetivo primário.
+          description: Whether this is a primary objective.
           example: true
         status:
           type: string
-          description: Status do objetivo.
+          description: Objective status.
           enum: [in_progress, completed, failed]
           example: in_progress
         text:
           type: string
-          description: Instrução apresentada ao jogador.
+          description: Instruction presented to the player.
           example: Decole
 
     NumericStringPair:
       type: array
-      description: Par de valores numéricos serializados como strings.
+      description: Pair of numeric values serialized as strings.
       minItems: 2
       maxItems: 2
       items:
@@ -597,4 +593,4 @@ components:
     TelemetryNumber:
       type: number
       format: double
-      description: Valor numérico de telemetria.
+      description: Numeric telemetry value.

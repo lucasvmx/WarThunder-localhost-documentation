@@ -1,5 +1,5 @@
-# State
-- This URL retrieves data of current aircraft state
+# Aircraft State
+- This URL retrieves data about the current aircraft state
 
 <br>
 
@@ -70,112 +70,112 @@
    </tr>
    <tr>
       <th>N</th>
-      <th>The engine number</th>
+      <th>Engine number</th>
    </tr>
  </table>
 
 - name: **valid**
     * contains: boolean
-    * description:
+    * description: Whether the returned state is valid.
 
 - name: **aileron, %**
     * contains: integer
-    * description:
+    * description: Aileron control input as a percentage.
 
 - name: **elevator, %**
     * contains: integer
-    * description:
+    * description: Elevator control input as a percentage.
 
 - name: **rudder, %**
     * contains: integer
-    * description:
+    * description: Rudder control input as a percentage.
 
 - name: **H, m**
     * contains: integer
-    * description: current aircraft altitude in meters
+    * description: Current aircraft altitude in meters.
 
 - name: **TAS, km/h**
     * contains: integer
-    * description: the true airspeed in kilometers per hour
+    * description: True airspeed in kilometers per hour.
 
 - name: **IAS, km/h**
     * contains: integer
-    * description: the indicated airspeed in kilometers per hour
+    * description: Indicated airspeed in kilometers per hour.
 
 - name: **M**
     * contains: decimal
-    * description:
+    * description: Mach number.
 
 - name: **AoA, deg**
     * contains: decimal
-    * description: aircraft angle of attack in degrees
+    * description: Aircraft angle of attack in degrees.
 
 - name: **AoS, deg**
     * contains: decimal
-    * description:
+    * description: Aircraft angle of sideslip in degrees.
 
 - name: **Ny**
     * contains: decimal
-    * description:
+    * description: Normal load factor.
 
 - name: **Vy, m/s**
     * contains: decimal
-    * description: aircraft vertical speed in meters per second
+    * description: Aircraft vertical speed in meters per second.
 
 - name: **Wx, deg/s**
     * contains: integer
-    * description: aircraft rotation on *x* axis in degrees per second
+    * description: Aircraft rotation around the *x* axis in degrees per second.
 
 - name: **Mfuel, kg**
     * contains: integer
-    * description:
+    * description: Current fuel mass in kilograms.
 
 - name: **Mfuel0, kg**
     * contains: integer
-    * description:
+    * description: Initial fuel mass in kilograms.
 
 - name: **throttle _N_, %**
     * contains: integer
-    * description:
+    * description: Throttle position of engine _N_ as a percentage.
 
 - name: **radiator _N_, %**
     * contains: integer
-    * description:
+    * description: Radiator position of engine _N_ as a percentage.
 
 - name: **magneto _N_**
     * contains: integer
-    * description:
+    * description: Magneto setting for engine _N_.
 
 - name: **power _N_, hp**
     * contains: decimal
-    * description: power of engine nº 1 in horse-power
+    * description: Power of engine _N_ in horsepower.
 
 - name: **RPM _N_**
     * contains: integer
-    * description:
+    * description: Revolutions per minute of engine _N_.
 
 - name: **manifold pressure _N_, atm**
     * contains: decimal
-    * description:
+    * description: Manifold pressure of engine _N_ in atmospheres.
 
 - name: **water temp _N_, C**
     * contains: integer
-    * description: water temperature of engine nº 1 in celsius
+    * description: Water temperature of engine _N_ in degrees Celsius.
 
 - name: **oil temp _N_, C**
     * contains: integer
-    * description:
+    * description: Oil temperature of engine _N_ in degrees Celsius.
 
 - name: **pitch _N_, deg**
     * contains: decimal
-    * description:
+    * description: Propeller pitch of engine _N_ in degrees.
 
 - name: **thrust _N_, kgs**
     * contains: integer
-    * description:
+    * description: Thrust produced by engine _N_ in kilograms-force.
 
 - name: **efficiency _N_, %**
     * contains: integer
-    * description:
+    * description: Efficiency of engine _N_ as a percentage.
     
     
